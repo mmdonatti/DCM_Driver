@@ -1,18 +1,18 @@
 #!/usr/bin/python
 
-####	Comunicacao com driver heaters DCM 		
-####	Mauricio Martins Donatti			
-####	mauricio.donatti@lnls.br				
-####	Ultima modificao: 08/05/2018	
-						
+####	Comunicacao com driver heaters DCM
+####	Mauricio Martins Donatti
+####	mauricio.donatti@lnls.br
+####	Ultima modificao: 14/05/2018
+
 import socket
 import datetime
 import os.path
 import time
 import sys
 
-ip		= '10.2.111.42' #raw_input("Qual IP para comunicacao?\n")
-porta 		= 5757 #raw_input("Qual porta para comunicacao Telnet? Default: 4747 \n")
+ip = '10.2.111.42' 		#raw_input("Qual IP para comunicacao?\n")
+porta = 6767 			#raw_input("Qual porta para comunicacao Telnet?\n")
 
 print("O ip e : %s . A porta e %d " %( ip, porta))
 
@@ -33,39 +33,46 @@ def send_socket(socket,str):
 	socket.sendall(str)
 	r = s.recv(1024)
 	s.close()
-	return r 
+	return r
 
 
 
 try:
-	while True: 
+	while True:
 		s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-		print("\n\n")
+		s.settimeout(2)
 		options=menu.keys()
 		options.sort()
 		not_open = 0
-		for entry in options: 
+		for entry in options:
 			print(entry, menu[entry])
-		selection=raw_input("\nPlease Select:") 
-		print "\n\n"
+		selection=raw_input("\nPlease Select:")
 		if selection =='q':
-			raise SystemExit		
-		elif (selection in ['ping','v','n']): 
+			raise SystemExit
+		elif (selection in ['ping','v']):
 			print "No Parameter Command"
 			ans = send_socket(s,selection+"\r")
-			print "Answer: " + ans	
-		elif (selection == 'reset'): 
+			print "Answer: " + ans
+		elif (selection == 'reset'):
 			print "No Parameter Command"
 			ans = send_socket(s,selection+"\r")
 			print "Answer: " + ans
 			raise SystemExit
-		elif selection == 'r': 
-			channel=raw_input("\nEnter Channel\n")	
+		elif selection == 'r':
+			channel=raw_input("\nEnter Channel\n")
 			ans = send_socket(s,channel+selection+"\r")
 			print "Answer: " + ans
-		elif (selection in ['l','e']): 
+		elif selection == 'n':
+			param=raw_input("\nSET (s) ou GET (g)?\n")
+			if (param in ['s','S','set','SET','Set']):
+				param="="+raw_input("\nEnter device name to set\n")+"\0"
+			else:
+				param = "?"
+			ans = send_socket(s,selection+param+"\r")
+			print "Answer: " + ans
+		elif (selection in ['l','e']):
 			channel=raw_input("\nEnter Channel\n")
-			print "Parameter Command\n" 
+			print "Parameter Command\n"
 			param=raw_input("\nSET (s) ou GET (g)?\n")
 			if (param in ['s','S','set','SET','Set']):
 				param=raw_input("\nDigite o valor do parametro: \n")
@@ -76,8 +83,10 @@ try:
 			elif (param in ['g','G','get','GET','Get']):
 				ans = send_socket(s,channel+selection+"?\r")
 				print "Answer: " + ans
-		else: 
+		else:
 			print "Unknown Option Selected!"
-
 except (KeyboardInterrupt,EOFError,SystemExit):
 	print("Closing Program")
+
+except (socket.timeout):
+	print("Socket Timeout")
