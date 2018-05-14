@@ -1,0 +1,59 @@
+<html><head><title>DCM Heaters Driver</title>
+<link rel="shortcut icon" type="image/x-icon" href="http://cnpem.br/wp-content/uploads/2018/01/LNLS_Sirius-02-293x300.png"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script></head>
+<script language="javascript" type="text/javascript">
+function loop(){
+	$.post("read_data", function(data){
+		if(data.length >0)
+		{
+			var str = data;
+			var res = str.split(" ");
+			if(res.length == 97){
+				var table = '<div id="data_table">'+
+				'<table width="100%" border="1" cellpadding="3" cellspacing="1" bgcolor="#E3EBFB">'+
+				'<tr align="center" valign="middle">'+
+				'<td width="50" height="40"><strong>Channel</font></strong></td>'+
+				'<td width="96" height="40"><strong>Voltage (V)</font></strong></td>'+
+				'<td width="96" height="40"><strong>Current (A)</font></strong></td>'+
+				'<td width="96" height="40"><strong>Duty Cycle PWM (%)</font></strong></td>'+
+				'<td width="96" height="40"><strong>Current Limit (A)</font></strong></td>'+
+				'<td width="96" height="40"><strong>Failure</font></strong></td>'+
+				'<td width="96" height="40"><strong>Overload</font></strong></td>'+
+				'<td width="96" height="40"><strong>No Load</font></strong></td>'+
+				'<td width="96" height="40"><strong>Enable</font></strong></td></tr>';
+				for(var i=0;i<8;i++){
+					table = table + '<tr align="center" valign="middle">'+
+					'<td width="50" height="31"bgcolor="#FFFFFF"><span style="font-weight:bold;">'+(i+1)+'</span></td>'+
+					'<td width="96" height="28"bgcolor="#FFFFFF"><span style="font-weight:bold;">'+res[i*12]+'</span></td>'+
+					'<td width="96" height="28"bgcolor="#FFFFFF"><span style="font-weight:bold;">'+res[i*12+1]+'</span></td>'+
+					'<td width="96" height="28"bgcolor="#FFFFFF"><span style="font-weight:bold;">'+res[i*12+2]+'</span></td>'+
+					'<td width="96" height="28"bgcolor="#FFFFFF"><span style="font-weight:bold;">'+res[i*12+3]+'</span></td>'+
+					'<td width="96" height="28"bgcolor="'+res[i*12+4]+'"><span style="font-weight:bold;">'+res[i*12+5]+'</span></td>'+
+					'<td width="96" height="28"bgcolor="'+res[i*12+6]+'"><span style="font-weight:bold;">'+res[i*12+7]+'</span></td>'+
+					'<td width="96" height="28"bgcolor="'+res[i*12+8]+'"><span style="font-weight:bold;">'+res[i*12+9]+'</span></td>'+
+					'<td width="96" height="28"bgcolor="'+res[i*12+10]+'"><span style="font-weight:bold;">'+res[i*12+11]+'</span></td>'+
+					'</tr>';
+				}
+			table = table + '</table></div>';
+			document.getElementById("data_table").innerHTML = table;
+			}
+		}
+	});
+	setTimeout(function(){ loop() }, 2000);
+}
+</script>
+<body onLoad="loop()">
+<table width="100%"border="0" cellspacing="0" cellpadding="0" style="font-weight:normal;">
+<tr>
+<td width="25%" height="142" align="center" valign="middle" style="border-bottom: #000000 solid 1px;">
+<a href="http://www.lnls.cnpem.br/"><img src="http://lnls.cnpem.br/wp-content/themes/lnls-v2/assets/images/logo-header.svg" alt="LNLS" width="305" height="142" /></a></td>
+<td colspan="5" height="142" align="center" scope="col" style="border-bottom: #000000 solid 1px;"><p><span class="style7">DCM HEATERS DRIVER<br /><br/>
+<strong>DIAGNOSTICS<br/></strong></span></p>
+<p><span class="style7"><strong><em> <a href="http://www.lnls.cnpem.br">LNLS</a></em></strong></span></p></td>
+<td width="25%" height="142" align="center" style="border-bottom: #000000 solid 1px;">
+<a href="http://www.lnls.cnpem.br/grupos/gae/"><img src="http://www.gae.agency/wp-content/uploads/2016/03/Logo_gae_hp_blue.png" alt="GAE" width="305" height="99" /></a></td>
+</tr>
+</table>
+<div id="data_table"></div>
+</body>
+</html>
