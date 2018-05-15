@@ -3,28 +3,26 @@
 ####	Comunicacao com driver heaters DCM
 ####	Mauricio Martins Donatti
 ####	mauricio.donatti@lnls.br
-####	Ultima modificao: 14/05/2018
+####	Brazilian Synchrotron Light Laboratory
 
 import socket
-import datetime
-import os.path
-import time
-import sys
 
 ip = '10.2.111.42' 		#raw_input("Qual IP para comunicacao?\n")
 porta = 6767 			#raw_input("Qual porta para comunicacao Telnet?\n")
 
-print("O ip e : %s . A porta e %d " %( ip, porta))
+print("O ip e : %s . A porta e %d \n" %( ip, porta))
 
 menu = {}
-menu['r']=" - Read Variables"
-menu['l']=" - Current Limit"
-menu['e']=" - Enable"
-menu['ping']=" - Ping message"
-menu['v']=" - Return Firmware Version"
-menu['n']=" - Return Device Name"
-menu['reset']=" - Reboot device"
-menu['q']=" - Quit"
+menu['r']="\tRead Variables"
+menu['l']="\tCurrent Limit"
+menu['e']="\tEnable"
+menu['ping']="\tPing message"
+menu['v']="\tReturn Firmware Version"
+menu['n']="\tReturn Device Name"
+menu['reset']="\tReboot device"
+menu['q']="\tQuit"
+options=menu.keys()
+options.sort()
 
 server_address=(ip,porta)
 
@@ -35,17 +33,12 @@ def send_socket(socket,str):
 	s.close()
 	return r
 
-
-
 try:
 	while True:
 		s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		s.settimeout(2)
-		options=menu.keys()
-		options.sort()
-		not_open = 0
 		for entry in options:
-			print(entry, menu[entry])
+			print(entry + menu[entry])
 		selection=raw_input("\nPlease Select:")
 		if selection =='q':
 			raise SystemExit
