@@ -10,10 +10,10 @@ mauricio.donatti@lnls.br</br>
 1. **Driver_DCM_Socket.py**: Open a socket and comunicate with the Driver.
 
 
-2. **Find_IP**: Search a subdomain for devices (IPs) with a TCP Server Socket on the specified port.
+2. **Find_IP.py**: Search a subdomain for devices (IPs) with a TCP Server Socket on the specified port.
 
 
-3. **firmware.txt**: device firmware link (MBED).
+3. **firmware.txt**: device firmware <a href="https://os.mbed.com/users/mmdonatti/code/DCM_Heaters_8CH_v2/">link</a> (MBED).
 
 
 4. **index.html**: HTTP server GET answer - html + JS.
